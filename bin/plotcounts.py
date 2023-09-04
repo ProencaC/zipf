@@ -1,24 +1,22 @@
-"""Brief description of what the script does."""
+"""Plot word counts."""
 
 import argparse
+
 import pandas as pd
 
-def generate_plot(infile,outfile):
-    df = pd.read_csv(infile, header=None,
-                    names=('word', 'word_frequency'))
+
+def main(args):
+    """Run the command line program."""
+    df = pd.read_csv(args.infile, header=None,
+                     names=('word', 'word_frequency'))
     df['rank'] = df['word_frequency'].rank(ascending=False,
-                                        method='max')
-    df['inverse_rank'] = 1 / df['rank']
+                                           method='max')
     ax = df.plot.scatter(x='word_frequency',
                          y='rank', loglog=True,
                          figsize=[12, 6],
                          grid=True,
                          xlim=args.xlim)
-    ax.figure.savefig(outfile)
-
-def main(args):
-    """Run the program."""
-    generate_plot(args.infile,args.outfile)
+    ax.figure.savefig(args.outfile)
 
 
 if __name__ == '__main__':
